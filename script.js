@@ -194,12 +194,14 @@ async function cargarHistorial() {
     const res  = await fetch(`${BACKEND_URL}/auth/historial/${usuarioActual.id}`);
     const data = await res.json();
 
-    if (!data.ventas || data.ventas.length === 0) {
-      content.innerHTML = '<div class="hist-empty"><p>🛒 Aún no tienes compras</p></div>';
+    const ventasFiltradas = (data.ventas || []).filter(v => v.estado === 'completed' || v.estado === 'cancelled');
+
+    if (ventasFiltradas.length === 0) {
+      content.innerHTML = '<div class="hist-empty"><p>🛒 Aún no tienes compras completadas</p></div>';
       return;
     }
 
-    content.innerHTML = data.ventas.map(v => {
+    content.innerHTML = ventasFiltradas.map(v => {
       const fecha  = new Date(v.created_at).toLocaleDateString('es-MX', { day:'2-digit', month:'long', year:'numeric' });
       let items = [];
       try {
@@ -216,7 +218,7 @@ async function cargarHistorial() {
               <span class="hist-id">ID: #${String(v.id).padStart(6, '0')}</span>
               <span class="hist-fecha">${fecha}</span>
             </div>
-            <div>
+            <div class="hist-right">
               <span class="hist-estado">${estado}</span>
               <span class="hist-monto">$${Number(v.monto_total).toFixed(0)} MXN</span>
             </div>
@@ -226,8 +228,11 @@ async function cargarHistorial() {
               ${items.map(item => `
                 <div class="hist-item">
                   <img src="${item.imagen_url}" alt="${item.nombre}" onerror="this.src='imgs/CONEJO_S.png'"/>
-                  <span>${item.nombre} ×${item.cantidad}</span>
-                  <span>$${(item.precio * item.cantidad).toFixed(0)}</span>
+                  <div class="hist-item-info">
+                    <div class="hist-item-name">${item.nombre}</div>
+                    <div class="hist-item-qty">Cantidad: ${item.cantidad}</div>
+                  </div>
+                  <span class="hist-item-price">$${(item.precio * item.cantidad).toFixed(0)}</span>
                 </div>
               `).join('')}
             </div>
