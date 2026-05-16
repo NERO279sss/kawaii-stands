@@ -933,3 +933,258 @@ body:hover .cursor-follower { opacity: .5; }
   from { opacity: 0; transform: translateY(40px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* =============================================
+   KAWAII STANDS — v3.1
+   Historial mejorado + Responsivo + Blobs
+   ============================================= */
+
+/* ── BLOBS MEJORADOS (más visibles, toda la sección) ── */
+.hero-blobs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+}
+.b1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, #FFCDD2, #FF8A80);
+  top: -100px; left: -100px;
+  animation: blobMove1 12s ease-in-out infinite alternate;
+}
+.b2 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #F8BBD0, #F48FB1);
+  top: 20%; right: -80px;
+  animation: blobMove2 15s ease-in-out infinite alternate;
+}
+.b3 {
+  width: 450px; height: 450px;
+  background: radial-gradient(circle, #FFE0B2, #FFCC80);
+  bottom: 0; left: 30%;
+  animation: blobMove3 10s ease-in-out infinite alternate;
+}
+
+/* Extender blobs a la sección de productos */
+.products-section {
+  position: relative;
+  overflow: hidden;
+}
+.products-section::before {
+  content: '';
+  position: absolute;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(255,205,210,0.45), rgba(255,138,128,0.25));
+  border-radius: 50%;
+  filter: blur(80px);
+  top: -200px; right: -200px;
+  animation: blobMove1 14s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+.products-section::after {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(248,187,208,0.4), rgba(255,204,128,0.3));
+  border-radius: 50%;
+  filter: blur(70px);
+  bottom: 0; left: -150px;
+  animation: blobMove3 16s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+.products-grid,
+.section-header,
+.filtros-bar,
+.special-bar {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes blobMove1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(80px, 60px) scale(1.15); }
+}
+@keyframes blobMove2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-60px, 80px) scale(1.1); }
+}
+@keyframes blobMove3 {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(50px, -70px) scale(1.2); }
+}
+
+/* ── HISTORIAL MEJORADO ──────────────────────── */
+.modal-historial {
+  padding: 2rem;
+  max-width: 580px;
+  width: 92vw;
+}
+.modal-historial h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.hist-card {
+  background: #FFF;
+  border: 1.5px solid rgba(26,23,20,.08);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 12px rgba(26,23,20,.06);
+}
+.hist-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: .8rem;
+}
+.hist-id {
+  display: block;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.hist-fecha {
+  display: block;
+  font-size: .78rem;
+  color: #9B9690;
+  margin-top: .1rem;
+}
+.hist-right {
+  text-align: right;
+}
+.hist-estado {
+  display: block;
+  font-size: .82rem;
+  font-weight: 600;
+  margin-bottom: .2rem;
+}
+.hist-monto {
+  display: block;
+  font-weight: 800;
+  font-size: 1.05rem;
+  font-family: 'Syne', sans-serif;
+}
+.hist-items {
+  border-top: 1px solid rgba(26,23,20,.07);
+  padding-top: .8rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.hist-item {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  font-size: .88rem;
+  padding: .3rem 0;
+}
+.hist-item img {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #F7F4EF;
+  flex-shrink: 0;
+}
+.hist-item-info {
+  flex: 1;
+}
+.hist-item-name { font-weight: 500; }
+.hist-item-qty  { color: #9B9690; font-size: .82rem; }
+.hist-item-price { font-weight: 600; white-space: nowrap; }
+.hist-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #9B9690;
+  font-size: 1rem;
+}
+
+/* ── RESPONSIVO MÓVIL ────────────────────────── */
+@media (max-width: 768px) {
+  /* Navbar */
+  .nav-inner { padding: 0 1rem; }
+  .nav-logo span:last-child { font-size: .95rem; }
+  .btn-auth-outline,
+  .btn-auth-fill { padding: .35rem .7rem; font-size: .78rem; }
+  .auth-guest { gap: .4rem; }
+
+  /* Hero */
+  .hero { padding: 6rem 1.5rem 3rem; min-height: auto; }
+  .hero-content h1 { font-size: 3rem; }
+  .hero-cards { display: none; }
+  .btn-hero { padding: .8rem 1.5rem; font-size: .9rem; }
+
+  /* Ticker */
+  .ticker-wrap { font-size: .8rem; }
+
+  /* Productos */
+  .products-section { padding: 3rem 1rem; }
+  .section-header h2 { font-size: 2.5rem; }
+  .filtros-bar { gap: .4rem; }
+  .filtro-btn { padding: .4rem .9rem; font-size: .82rem; }
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+  .card-body { padding: .8rem; }
+  .card-name { font-size: .9rem; }
+  .card-price { font-size: 1rem; }
+  .btn-add { padding: .5rem .8rem; font-size: .78rem; }
+
+  /* Features */
+  .features-inner {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.2rem !important;
+  }
+
+  /* Cart sidebar */
+  .cart-sidebar { width: 100% !important; right: -100% !important; }
+
+  /* Modales */
+  .modal-box {
+    flex-direction: column !important;
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 1rem;
+    width: calc(100% - 2rem) !important;
+  }
+  .modal-panel { width: 100% !important; padding: 1.5rem !important; }
+  .modal-left { border-right: none !important; border-bottom: 1px solid rgba(26,23,20,.08); }
+  .modal-auth { padding: 1.8rem 1.2rem; margin: 1rem; }
+  .modal-historial { width: 95vw; max-height: 88vh; padding: 1.5rem 1rem; }
+
+  /* Footer */
+  .footer-inner {
+    flex-direction: column !important;
+    gap: .8rem !important;
+    text-align: center;
+  }
+
+  /* Blobs más pequeños en móvil */
+  .b1 { width: 300px; height: 300px; }
+  .b2 { width: 250px; height: 250px; }
+  .b3 { width: 220px; height: 220px; }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 { font-size: 2.2rem; }
+  .products-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .features-inner {
+    grid-template-columns: 1fr !important;
+  }
+  .hist-head { flex-direction: column; align-items: flex-start; }
+}
