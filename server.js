@@ -20,11 +20,20 @@ const db = createClient(
 );
 
 // ── MIDDLEWARES ────────────────────────────
-app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+const corsOptions = {
+  origin: [
+    'https://soportes-3d.netlify.app',
+    'http://localhost:5500',
+    'http://localhost:3000',
+    process.env.FRONTEND_URL
+  ],
   methods: ['GET', 'POST', 'OPTIONS'],
-  credentials: true,
-}));
+  allowedHeaders: ['Content-Type', 'stripe-signature'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // Webhook de Stripe necesita el body RAW (antes de json())
 app.use('/webhook', express.raw({ type: 'application/json' }));
