@@ -542,7 +542,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async e => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        items,
+        items: cart,
         cliente: {
           nombre:     usuarioActual.nombre,
           email:      usuarioActual.email,
