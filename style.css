@@ -686,3 +686,250 @@ body:hover .cursor-follower { opacity: .5; }
   .hcard { width: 160px; }
   .hcard img { width: 46px; height: 46px; }
 }
+
+/* =============================================
+   KAWAII STANDS — ESTILOS NUEVOS v3
+   Auth + Filtros + Stock + Historial
+   ============================================= */
+
+/* ── NAV DERECHO ─────────────────────── */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ── AUTH GUEST ──────────────────────── */
+.auth-guest {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.btn-auth-outline {
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  padding: .45rem 1rem;
+  border-radius: 50px;
+  font-size: .85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.btn-auth-outline:hover { background: var(--ink); color: white; }
+.btn-auth-fill {
+  background: var(--ink);
+  color: white;
+  border: none;
+  padding: .45rem 1rem;
+  border-radius: 50px;
+  font-size: .85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-auth-fill:hover { background: var(--accent); }
+
+/* ── AUTH USER DROPDOWN ──────────────── */
+.auth-user {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.btn-user-menu {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  background: #F7F4EF;
+  border: none;
+  padding: .4rem .8rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: .85rem;
+  font-weight: 500;
+  transition: background .2s;
+}
+.btn-user-menu:hover { background: #EEEBE4; }
+.user-avatar { font-size: 1rem; }
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + .5rem);
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(26,23,20,.12);
+  padding: .4rem;
+  min-width: 160px;
+  display: none;
+  z-index: 999;
+}
+.user-dropdown.open { display: block; }
+.user-dropdown a {
+  display: block;
+  padding: .6rem 1rem;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: .9rem;
+  border-radius: 8px;
+  transition: background .15s;
+}
+.user-dropdown a:hover { background: #F7F4EF; }
+
+/* ── MODAL AUTH ──────────────────────── */
+.modal-auth {
+  background: white;
+  border-radius: 24px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  animation: slideUp .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+.auth-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.auth-header span { font-size: 2rem; }
+.auth-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -.04em;
+  margin: .3rem 0 .2rem;
+}
+.auth-header h2 em { font-style: normal; color: var(--accent); }
+.auth-header p { color: #6B6860; font-size: .9rem; }
+.auth-switch {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: .85rem;
+  color: #6B6860;
+}
+.auth-switch a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.auth-switch a:hover { text-decoration: underline; }
+
+/* ── CHECKOUT INFO USUARIO ───────────── */
+.user-info-checkout {
+  background: #F7F4EF;
+  border-radius: 10px;
+  padding: .8rem 1rem;
+  margin-bottom: 1rem;
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+/* ── FILTROS ─────────────────────────── */
+.filtros-bar {
+  display: flex;
+  gap: .6rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.filtro-btn {
+  background: #F7F4EF;
+  border: 1.5px solid transparent;
+  color: var(--ink);
+  padding: .5rem 1.2rem;
+  border-radius: 50px;
+  font-size: .9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s;
+}
+.filtro-btn:hover { background: #EEEBE4; }
+.filtro-btn.active {
+  background: var(--ink);
+  color: white;
+  border-color: var(--ink);
+}
+
+/* ── AGOTADO ─────────────────────────── */
+.product-card.agotado { opacity: .75; }
+.card-img-wrap { position: relative; }
+.agotado-badge {
+  position: absolute;
+  top: .8rem;
+  left: .8rem;
+  background: rgba(0,0,0,.7);
+  color: white;
+  padding: .25rem .6rem;
+  border-radius: 6px;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+.card-stock { font-size: .8rem; color: #6B6860; margin-bottom: .5rem; }
+.stock-agotado { color: var(--accent); font-weight: 600; }
+.btn-agotado {
+  background: #D1D5DB !important;
+  color: #6B7280 !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+/* ── HISTORIAL ───────────────────────── */
+.modal-historial {
+  max-width: 620px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.modal-historial h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -.04em;
+  margin-bottom: 1.5rem;
+}
+.modal-historial h2 em { font-style: normal; color: var(--accent); }
+.hist-empty { text-align: center; padding: 3rem; color: #6B6860; font-size: 1.1rem; }
+.hist-card {
+  background: #F7F4EF;
+  border-radius: 14px;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+}
+.hist-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: .8rem;
+  gap: 1rem;
+}
+.hist-id {
+  display: block;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: .95rem;
+  color: var(--ink);
+}
+.hist-fecha { font-size: .8rem; color: #6B6860; }
+.hist-estado { font-size: .85rem; font-weight: 600; }
+.hist-monto {
+  display: block;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: right;
+}
+.hist-items { border-top: 1px solid rgba(26,23,20,.08); padding-top: .8rem; }
+.hist-item {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: .4rem 0;
+  font-size: .88rem;
+}
+.hist-item img {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: white;
+}
+.hist-item span { flex: 1; }
+
+/* ── ANIMACIÓN SLIDUP ────────────────── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
