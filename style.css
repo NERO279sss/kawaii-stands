@@ -989,3 +989,32 @@ body:hover .cursor-follower { opacity: .5; }
 @media (max-width: 480px) {
   .products-grid { grid-template-columns: 1fr !important; }
 }
+
+/* ── FIX NAVBAR MÓVIL ─────────────────────────── */
+@media (max-width: 768px) {
+  .nav-inner {
+    padding: 0 .8rem;
+    gap: .4rem;
+  }
+  .nav-right {
+    gap: .3rem;
+    flex-shrink: 0;
+  }
+  .btn-auth-outline,
+  .btn-auth-fill {
+    padding: .28rem .55rem;
+    font-size: .7rem;
+  }
+  .btn-user-menu {
+    padding: .28rem .55rem;
+    font-size: .72rem;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cart-trigger {
+    flex-shrink: 0;
+    min-width: 38px;
+  }
+}
