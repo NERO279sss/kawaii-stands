@@ -201,14 +201,19 @@ async function cargarHistorial() {
 
     content.innerHTML = data.ventas.map(v => {
       const fecha  = new Date(v.created_at).toLocaleDateString('es-MX', { day:'2-digit', month:'long', year:'numeric' });
-      const items  = v.items ? (Array.isArray(v.items) ? v.items : JSON.parse(v.items)) : [];
+      let items = [];
+      try {
+        if (v.items) {
+          items = typeof v.items === 'string' ? JSON.parse(v.items) : v.items;
+        }
+      } catch(e) { items = []; }
       const estado = v.estado === 'completed' ? '✅ Completado' : v.estado === 'pending' ? '⏳ Pendiente' : '❌ Cancelado';
 
       return `
         <div class="hist-card">
           <div class="hist-head">
             <div>
-              <span class="hist-id">ID: ${v.id.slice(0, 8).toUpperCase()}</span>
+              <span class="hist-id">ID: #${String(v.id).padStart(6, '0')}</span>
               <span class="hist-fecha">${fecha}</span>
             </div>
             <div>
