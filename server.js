@@ -1,271 +1,300 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kawaii Stands — Soportes de Celular</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+// =============================================
+//  KAWAII STANDS — server.js v3
+//  Backend: Node.js + Express + Stripe + Auth
+// =============================================
 
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-follower" id="cursorFollower"></div>
+require('dotenv').config({ path: './.env' });
+const express  = require('express');
+const cors     = require('cors');
+const crypto   = require('crypto');
+const stripe   = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { createClient } = require('@supabase/supabase-js');
 
-  <!-- NAVBAR -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-inner">
-      <a href="#" class="nav-logo">
-        <span>🐾</span>
-        <span>Kawaii<strong>Stands</strong></span>
-      </a>
-      <div class="nav-right">
-        <!-- Auth: No logueado -->
-        <div id="authGuest" class="auth-guest">
-          <button class="btn-auth-outline" id="btnAbrirLogin">Iniciar sesión</button>
-          <button class="btn-auth-fill" id="btnAbrirRegistro">Registrarse</button>
-        </div>
-        <!-- Auth: Logueado -->
-        <div id="authUser" class="auth-user" style="display:none">
-          <button class="btn-user-menu" id="btnUserMenu">
-            <span class="user-avatar">🐾</span>
-            <span id="userNombre">Usuario</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-          <div class="user-dropdown" id="userDropdown">
-            <a href="#" id="btnVerHistorial">📦 Mis compras</a>
-            <a href="#" id="btnCerrarSesion">🚪 Cerrar sesión</a>
-          </div>
-        </div>
-        <!-- Carrito -->
-        <button class="cart-trigger" id="cartTrigger">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 01-8 0"/>
-          </svg>
-          <span class="cart-count" id="cartCount">0</span>
-        </button>
-      </div>
-    </div>
-  </nav>
+const app  = express();
+const PORT = process.env.PORT || 3001;
 
-  <!-- MODAL: LOGIN -->
-  <div class="modal-bg" id="modalLogin">
-    <div class="modal-auth">
-      <button class="modal-x" id="cerrarLogin">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-      <div class="auth-header">
-        <span>🐾</span>
-        <h2>Iniciar <em>sesión</em></h2>
-        <p>Bienvenido de vuelta</p>
-      </div>
-      <div class="fgroup">
-        <label>Correo electrónico</label>
-        <input type="email" id="login-email" placeholder="tu@correo.com"/>
-      </div>
-      <div class="fgroup">
-        <label>Contraseña</label>
-        <input type="password" id="login-password" placeholder="••••••••"/>
-      </div>
-      <button class="btn-pay" id="btnLogin">Iniciar sesión</button>
-      <p class="auth-switch">¿No tienes cuenta? <a href="#" id="switchToRegistro">Regístrate</a></p>
-    </div>
-  </div>
+const db = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
 
-  <!-- MODAL: REGISTRO -->
-  <div class="modal-bg" id="modalRegistro">
-    <div class="modal-auth">
-      <button class="modal-x" id="cerrarRegistro">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-      <div class="auth-header">
-        <span>🐾</span>
-        <h2>Crear <em>cuenta</em></h2>
-        <p>Únete a la familia kawaii</p>
-      </div>
-      <div class="fgroup">
-        <label>Nombre completo</label>
-        <input type="text" id="reg-nombre" placeholder="Tu nombre"/>
-      </div>
-      <div class="fgroup">
-        <label>Correo electrónico</label>
-        <input type="email" id="reg-email" placeholder="tu@correo.com"/>
-      </div>
-      <div class="fgroup">
-        <label>Contraseña (mínimo 6 caracteres)</label>
-        <input type="password" id="reg-password" placeholder="••••••••"/>
-      </div>
-      <button class="btn-pay" id="btnRegistro">Crear cuenta</button>
-      <p class="auth-switch">¿Ya tienes cuenta? <a href="#" id="switchToLogin">Inicia sesión</a></p>
-    </div>
-  </div>
+// ── CORS ───────────────────────────────────
+const corsOptions = {
+  origin: [
+    'https://soportes-3d.netlify.app',
+    'http://localhost:5500',
+    'http://localhost:3000',
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'stripe-signature'],
+  credentials: true
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
-  <!-- MODAL: HISTORIAL DE COMPRAS -->
-  <div class="modal-bg" id="modalHistorial">
-    <div class="modal-box modal-historial">
-      <button class="modal-x" id="cerrarHistorial">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-      <h2>Mis <em>compras</em></h2>
-      <div id="historialContent">
-        <div class="grid-loading"><div class="spinner"></div><p>Cargando historial...</p></div>
-      </div>
-    </div>
-  </div>
+// Webhook necesita body RAW
+app.use('/webhook', express.raw({ type: 'application/json' }));
+app.use(express.json());
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-blobs">
-      <div class="blob b1"></div>
-      <div class="blob b2"></div>
-      <div class="blob b3"></div>
-    </div>
-    <div class="hero-content">
-      <div class="hero-pill">✦ Edición Limitada 2024</div>
-      <h1>Soportes que<br/><em>abrazan</em> tu<br/>teléfono</h1>
-      <p>12 figuras kawaii de resina premium.<br/>Cada pieza, un universo propio.</p>
-      <a href="#productos" class="btn-hero">
-        Ver colección
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
-      </a>
-    </div>
-    <div class="hero-cards">
-      <div class="hcard hc1"><img src="imgs/CONEJO_S.png" alt="Conejo"/><span>Conejo</span></div>
-      <div class="hcard hc2"><img src="imgs/PANDA_S.png" alt="Panda"/><span>Panda</span></div>
-      <div class="hcard hc3"><img src="imgs/GIRAFA_S.png" alt="Jirafa"/><span>Jirafa</span></div>
-    </div>
-    <div class="scroll-hint"><div class="scroll-dot"></div></div>
-  </section>
+// ── HELPERS ────────────────────────────────
+function hashPassword(password) {
+  return crypto.createHash('sha256').update(password + 'kawaii_salt_2024').digest('hex');
+}
 
-  <!-- TICKER -->
-  <div class="ticker-wrap">
-    <div class="ticker-track">
-      <span>🐾 Envío gratis +$499</span><span>✦</span>
-      <span>Resina de alta calidad</span><span>✦</span>
-      <span>🌟 Stock limitado</span><span>✦</span>
-      <span>Figuras pintadas a mano</span><span>✦</span>
-      <span>🐾 Envío gratis +$499</span><span>✦</span>
-      <span>Resina de alta calidad</span><span>✦</span>
-      <span>🌟 Stock limitado</span><span>✦</span>
-      <span>Figuras pintadas a mano</span><span>✦</span>
-    </div>
-  </div>
+// ── LOG DE ARRANQUE ────────────────────────
+console.log(`\n🚀 KAWAII STANDS BACKEND v3 INICIANDO...`);
+console.log(`📦 Stripe Mode: ${process.env.STRIPE_SECRET_KEY?.startsWith('sk_test') ? '🧪 TEST' : '🔴 PRODUCCIÓN'}`);
+console.log(`🗄️  Supabase: ${process.env.SUPABASE_URL}`);
+console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL}`);
+console.log(`⚡ Puerto: ${PORT}\n`);
 
-  <!-- PRODUCTOS -->
-  <section class="products-section" id="productos">
-    <div class="section-header">
-      <p class="section-eyebrow">— Colección Completa</p>
-      <h2>Elige tu<br/><em>compañero</em></h2>
-    </div>
+// ── AUTH: REGISTRO ─────────────────────────
+app.post('/auth/registro', async (req, res) => {
+  const { nombre, email, password } = req.body;
 
-    <!-- FILTROS -->
-    <div class="filtros-bar">
-      <button class="filtro-btn active" data-filtro="todos">🐾 Todos</button>
-      <button class="filtro-btn" data-filtro="normal">🐼 Colección Animal</button>
-      <button class="filtro-btn" data-filtro="especial">⚡ Edición Especial</button>
-    </div>
+  if (!nombre || !email || !password) {
+    return res.status(400).json({ error: 'Todos los campos son requeridos' });
+  }
+  if (password.length < 6) {
+    return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+  }
 
-    <div class="special-bar">
-      <span class="special-chip">⚡ Edición Especial</span>
-      <span>Godzilla &amp; Power Ranger — piezas de colección exclusivas</span>
-    </div>
+  try {
+    const { data: existe } = await db
+      .from('usuarios')
+      .select('id')
+      .eq('email', email.toLowerCase())
+      .single();
 
-    <div class="products-grid" id="productsGrid">
-      <div class="grid-loading">
-        <div class="spinner"></div>
-        <p>Cargando colección...</p>
-      </div>
-    </div>
-  </section>
+    if (existe) {
+      return res.status(409).json({ error: 'Este correo ya está registrado' });
+    }
 
-  <!-- FEATURES -->
-  <section class="features-section">
-    <div class="features-inner">
-      <div class="feat"><div class="feat-icon">🎨</div><h4>Resina Premium</h4><p>Pintada a mano, detalle a detalle</p></div>
-      <div class="feat"><div class="feat-icon">📱</div><h4>Universal</h4><p>Compatible con todos los smartphones</p></div>
-      <div class="feat"><div class="feat-icon">🚚</div><h4>Envío Express</h4><p>Gratis en pedidos mayores a $499 MXN</p></div>
-      <div class="feat"><div class="feat-icon">✨</div><h4>Edición Limitada</h4><p>Diseños exclusivos, stock reducido</p></div>
-    </div>
-  </section>
+    const password_hash = hashPassword(password);
 
-  <!-- CART SIDEBAR -->
-  <div class="cart-overlay" id="cartOverlay"></div>
-  <aside class="cart-sidebar" id="cartSidebar">
-    <div class="cart-top">
-      <h3>Carrito</h3>
-      <button id="cartClose">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div class="cart-body" id="cartItems">
-      <div class="cart-empty"><div>🛒</div><p>Tu carrito está vacío</p><small>Agrega soportes kawaii</small></div>
-    </div>
-    <div class="cart-bottom" id="cartBottom" style="display:none">
-      <div class="cart-subtotal-row">
-        <span>Subtotal</span>
-        <strong id="cartTotal">$0.00 MXN</strong>
-      </div>
-      <button class="btn-go-checkout" id="btnGoCheckout">
-        Continuar
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-  </aside>
+    const { data, error } = await db
+      .from('usuarios')
+      .insert([{ nombre, email: email.toLowerCase(), password_hash }])
+      .select('id, nombre, email, created_at')
+      .single();
 
-  <!-- MODAL CHECKOUT -->
-  <div class="modal-bg" id="modalBg">
-    <div class="modal-box" id="modalBox">
-      <button class="modal-x" id="modalClose">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </button>
-      <div class="modal-panel modal-left">
-        <h2>Finalizar<br/><em>pedido</em></h2>
-        <div id="orderSummary" class="order-summary"></div>
-        <div class="order-total-row">
-          <span>Total</span>
-          <strong id="modalTotal">$0.00 MXN</strong>
-        </div>
-        <div class="secure-note">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Pago 100% seguro · Stripe
-        </div>
-      </div>
-      <div class="modal-panel modal-right">
-        <h3>Confirmar <em>datos</em></h3>
-        <div id="checkoutUserInfo" class="checkout-user-info"></div>
-        <form id="checkoutForm" novalidate>
-          <div class="fgroup">
-            <label>Dirección de envío *</label>
-            <textarea id="inp-dir" rows="3" placeholder="Calle, número, colonia, ciudad, CP" required></textarea>
-          </div>
-          <button type="submit" class="btn-pay" id="btnPay">
-            <span id="payText">Pagar con Stripe</span>
-            <div class="pay-spinner" id="paySpinner" style="display:none"></div>
-          </button>
-          <p class="pay-note">Serás redirigido a Stripe de forma segura</p>
-        </form>
-      </div>
-    </div>
-  </div>
+    if (error) throw error;
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <span class="footer-logo">🐾 Kawaii<strong>Stands</strong></span>
-      <p>© 2024 KawaiiStands · Todos los derechos reservados</p>
-      <div class="footer-secure">
-        <svg width="40" height="17" viewBox="0 0 60 25">
-          <rect width="60" height="25" rx="4" fill="#635BFF"/>
-          <text x="8" y="17" fill="white" font-size="12" font-family="sans-serif" font-weight="bold">stripe</text>
-        </svg>
-      </div>
-    </div>
-  </footer>
+    console.log(`[✓] Usuario registrado: ${email}`);
+    res.json({ usuario: data });
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+  } catch (err) {
+    console.error('[ERROR] Registro:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── AUTH: LOGIN ────────────────────────────
+app.post('/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email y contraseña requeridos' });
+  }
+
+  try {
+    const password_hash = hashPassword(password);
+
+    const { data: usuario, error } = await db
+      .from('usuarios')
+      .select('id, nombre, email, created_at')
+      .eq('email', email.toLowerCase())
+      .eq('password_hash', password_hash)
+      .single();
+
+    if (error || !usuario) {
+      return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
+    }
+
+    console.log(`[✓] Login exitoso: ${email}`);
+    res.json({ usuario });
+
+  } catch (err) {
+    console.error('[ERROR] Login:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── AUTH: HISTORIAL DE COMPRAS ─────────────
+app.get('/auth/historial/:usuario_id', async (req, res) => {
+  const { usuario_id } = req.params;
+
+  try {
+    const { data, error } = await db
+      .from('ventas')
+      .select('*')
+      .eq('usuario_id', usuario_id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    res.json({ ventas: data || [] });
+
+  } catch (err) {
+    console.error('[ERROR] Historial:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── STRIPE: Crear sesión de Checkout ───────
+app.post('/crear-sesion', async (req, res) => {
+  const { items, cliente, pedido_id } = req.body;
+
+  console.log(`[POST /crear-sesion] Cliente: ${cliente?.email}`);
+
+  if (!items || items.length === 0) {
+    return res.status(400).json({ error: 'Carrito vacío' });
+  }
+
+  try {
+    const line_items = items.map(item => ({
+      price_data: {
+        currency: 'mxn',
+        product_data: {
+          name: item.nombre,
+          images: [`${process.env.FRONTEND_URL || 'http://localhost:5500'}/imgs/${item.imagen_url.split('/').pop()}`],
+        },
+        unit_amount: Math.round(item.precio * 100),
+      },
+      quantity: item.cantidad,
+    }));
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items,
+      mode: 'payment',
+      customer_email: cliente.email,
+      metadata: {
+        pedido_id:      pedido_id?.toString() ?? '',
+        usuario_id:     cliente.usuario_id ?? '',
+        cliente_nombre: cliente.nombre,
+        cliente_tel:    cliente.telefono ?? '',
+        cliente_dir:    cliente.direccion,
+        items:          JSON.stringify(items),
+      },
+      success_url: `${process.env.FRONTEND_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url:  `${process.env.FRONTEND_URL}/index.html?cancelado=1`,
+      locale: 'es',
+    });
+
+    console.log(`[✓] Sesión Stripe creada: ${session.id}`);
+    res.json({ url: session.url, session_id: session.id });
+
+  } catch (err) {
+    console.error('[ERROR] Creando sesión Stripe:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── STRIPE: Webhook ─────────────────────────
+app.post('/webhook', async (req, res) => {
+  const sig    = req.headers['stripe-signature'];
+  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, secret);
+  } catch (err) {
+    console.error('[ERROR] Webhook inválido:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const session   = event.data.object;
+    const pedidoId  = session.metadata?.pedido_id;
+    const usuarioId = session.metadata?.usuario_id;
+    const email     = session.customer_email;
+    const monto     = session.amount_total / 100;
+    const items     = session.metadata?.items ? JSON.parse(session.metadata.items) : [];
+
+    console.log(`[✅ PAGO COMPLETADO] ${email} — $${monto} MXN`);
+
+    try {
+      if (pedidoId) {
+        await db.from('ventas')
+          .update({ estado: 'completed', stripe_session_id: session.id, updated_at: new Date().toISOString() })
+          .eq('id', pedidoId);
+      } else {
+        await db.from('ventas').insert([{
+          stripe_session_id: session.id,
+          usuario_id:        usuarioId || null,
+          usuario_email:     email,
+          usuario_nombre:    session.metadata?.cliente_nombre ?? '',
+          usuario_telefono:  session.metadata?.cliente_tel ?? '',
+          usuario_direccion: session.metadata?.cliente_dir ?? '',
+          monto_total:       monto,
+          estado:            'completed',
+          items:             items,
+        }]);
+      }
+
+      // ── DESCONTAR STOCK ───────────────────
+      for (const item of items) {
+        const { data: producto } = await db
+          .from('productos')
+          .select('stock')
+          .eq('id', item.id)
+          .single();
+
+        if (producto) {
+          const nuevoStock = Math.max(0, (producto.stock || 0) - (item.cantidad || 1));
+          await db.from('productos').update({ stock: nuevoStock }).eq('id', item.id);
+          console.log(`[✓] Stock: producto ${item.id} → ${nuevoStock}`);
+        }
+      }
+
+    } catch (dbErr) {
+      console.error('[ERROR] BD:', dbErr.message);
+    }
+  }
+
+  if (event.type === 'checkout.session.expired') {
+    const session  = event.data.object;
+    const pedidoId = session.metadata?.pedido_id;
+    if (pedidoId) {
+      await db.from('ventas').update({ estado: 'cancelled' }).eq('id', pedidoId);
+    }
+  }
+
+  res.json({ received: true });
+});
+
+// ── Verificar pago ──────────────────────────
+app.get('/verificar-pago/:sessionId', async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.retrieve(req.params.sessionId);
+
+    const { data: venta } = await db
+      .from('ventas')
+      .select('id, items, monto_total, estado, usuario_id')
+      .eq('stripe_session_id', session.id)
+      .single();
+
+    res.json({
+      pagado:   session.payment_status === 'paid',
+      email:    session.customer_email,
+      monto:    session.amount_total / 100,
+      moneda:   session.currency.toUpperCase(),
+      status:   session.payment_status,
+      venta_id: venta?.id ?? null,
+      items:    venta?.items ?? [],
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Health check ────────────────────────────
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Servidor corriendo en puerto ${PORT}\n`);
+});
