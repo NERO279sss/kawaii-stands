@@ -1290,3 +1290,106 @@ body:hover .cursor-follower { opacity: .5; }
   .gb1, .gb2 { width: 350px; height: 350px; }
   .gb3, .gb4, .gb5 { width: 280px; height: 280px; }
 }
+
+/* =============================================
+   FIX MÓVIL — Corregir grid y navbar
+   ============================================= */
+
+@media (max-width: 768px) {
+
+  /* Navbar fijo y bien acomodado */
+  .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 999; }
+  .nav-inner {
+    height: 56px;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo { font-size: .9rem; }
+  .nav-right { gap: .4rem; }
+  .btn-auth-outline,
+  .btn-auth-fill {
+    padding: .3rem .6rem;
+    font-size: .72rem;
+  }
+  .btn-user-menu {
+    padding: .3rem .6rem;
+    font-size: .78rem;
+  }
+  .cart-trigger {
+    width: 36px; height: 36px;
+    min-width: 36px;
+  }
+  .cart-count {
+    width: 16px; height: 16px;
+    font-size: .6rem;
+    top: -4px; right: -4px;
+  }
+
+  /* Espacio para navbar fijo */
+  body { padding-top: 56px; }
+
+  /* Grid 2 columnas en móvil */
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: .7rem !important;
+    padding: 0 .5rem !important;
+  }
+
+  /* Cards más compactas */
+  .product-card { border-radius: 12px; }
+  .card-img-wrap img {
+    height: 130px !important;
+    object-fit: cover;
+  }
+  .card-body {
+    padding: .6rem .7rem !important;
+  }
+  .card-name { font-size: .82rem !important; font-weight: 700; }
+  .card-desc { font-size: .72rem !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card-stock { font-size: .72rem !important; }
+  .card-footer {
+    flex-direction: column !important;
+    gap: .4rem !important;
+    align-items: flex-start !important;
+  }
+  .card-price { font-size: .9rem !important; }
+  .btn-add {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: .45rem .6rem !important;
+    font-size: .76rem !important;
+  }
+
+  /* Cart sidebar full width */
+  .cart-sidebar {
+    width: 100% !important;
+    right: -100% !important;
+    border-radius: 0 !important;
+  }
+
+  /* Sección productos con padding top */
+  .products-section {
+    padding-top: 2rem !important;
+  }
+
+  /* Hero responsive */
+  .hero {
+    padding: 2rem 1rem 3rem !important;
+    min-height: auto !important;
+    text-align: center;
+  }
+  .hero-content { padding: 0 !important; }
+  .hero-content h1 { font-size: 2.5rem !important; }
+  .hero-pill { margin: 0 auto 1rem !important; }
+  .hero-cards { display: none !important; }
+  .scroll-hint { display: none !important; }
+}
+
+@media (max-width: 380px) {
+  .products-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .card-img-wrap img { height: 200px !important; }
+}
