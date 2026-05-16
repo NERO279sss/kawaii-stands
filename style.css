@@ -1188,3 +1188,105 @@ body:hover .cursor-follower { opacity: .5; }
   }
   .hist-head { flex-direction: column; align-items: flex-start; }
 }
+
+/* =============================================
+   BLOBS GLOBALES — cubren toda la página
+   ============================================= */
+
+/* Quitar blobs anteriores de hero y products */
+.hero-blobs { display: none; }
+.products-section::before,
+.products-section::after { display: none; }
+
+/* Contenedor global fijo detrás de todo */
+.global-blobs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Todos los elementos encima de los blobs */
+.navbar, .hero, .hero-content, .ticker-wrap,
+.products-section, .features-section, .footer,
+.cart-sidebar, .cart-overlay,
+.modal-bg, .modal-box, .modal-auth, .modal-historial,
+.cursor, .cursor-follower {
+  position: relative;
+  z-index: 1;
+}
+
+.gblob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+}
+
+/* Blob 1 — Rosa fuerte, arriba izquierda */
+.gb1 {
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, #FFAAB5, #FF7F8E);
+  top: -150px; left: -150px;
+  animation: gb1move 14s ease-in-out infinite alternate;
+}
+
+/* Blob 2 — Rosa claro, arriba derecha */
+.gb2 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, #FFD6DC, #FFB3BD);
+  top: 5%; right: -100px;
+  animation: gb2move 18s ease-in-out infinite alternate;
+}
+
+/* Blob 3 — Durazno/naranja, centro */
+.gb3 {
+  width: 550px; height: 550px;
+  background: radial-gradient(circle, #FFE0C8, #FFCBA8);
+  top: 35%; left: 20%;
+  animation: gb3move 12s ease-in-out infinite alternate;
+}
+
+/* Blob 4 — Rosa suave, abajo izquierda */
+.gb4 {
+  width: 650px; height: 650px;
+  background: radial-gradient(circle, #FFBFC9, #FF96A4);
+  top: 60%; left: -100px;
+  animation: gb4move 16s ease-in-out infinite alternate;
+}
+
+/* Blob 5 — Durazno, abajo derecha */
+.gb5 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #FFD4C2, #FFB899);
+  top: 70%; right: -80px;
+  animation: gb5move 20s ease-in-out infinite alternate;
+}
+
+@keyframes gb1move {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(100px, 80px) scale(1.2); }
+}
+@keyframes gb2move {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-80px, 120px) scale(1.15); }
+}
+@keyframes gb3move {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(60px, -80px) scale(1.1); }
+}
+@keyframes gb4move {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(90px, -60px) scale(1.2); }
+}
+@keyframes gb5move {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-70px, -90px) scale(1.15); }
+}
+
+/* Móvil: blobs más pequeños */
+@media (max-width: 768px) {
+  .gb1, .gb2 { width: 350px; height: 350px; }
+  .gb3, .gb4, .gb5 { width: 280px; height: 280px; }
+}
