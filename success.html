@@ -85,7 +85,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const BACKEND = 'http://localhost:3001'; // Cambia en producción
+    // CORREGIDO: Usar la URL de producción de Render
+    const BACKEND = 'https://kawaii-stands.onrender.com';
 
     async function verificarPago() {
       const params    = new URLSearchParams(window.location.search);
@@ -136,6 +137,7 @@
             <a class="btn-back" href="index.html">← Volver a la tienda</a>`;
         }
       } catch (err) {
+        console.error('Error verificando pago:', err);
         card.innerHTML = `
           <div class="success-icon">✅</div>
           <h1>¡Pago <em>recibido!</em></h1>
