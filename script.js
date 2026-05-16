@@ -59,9 +59,11 @@ function actualizarNavAuth() {
 
 // Abrir/cerrar modales auth
 document.getElementById('btnAbrirLogin').addEventListener('click', () => {
+  document.getElementById('modalRegistro').classList.remove('open');
   document.getElementById('modalLogin').classList.add('open');
 });
 document.getElementById('btnAbrirRegistro').addEventListener('click', () => {
+  document.getElementById('modalLogin').classList.remove('open');
   document.getElementById('modalRegistro').classList.add('open');
 });
 document.getElementById('cerrarLogin').addEventListener('click', () => {
