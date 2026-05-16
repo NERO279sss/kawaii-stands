@@ -20,16 +20,101 @@
         <span>🐾</span>
         <span>Kawaii<strong>Stands</strong></span>
       </a>
-      <button class="cart-trigger" id="cartTrigger">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 01-8 0"/>
-        </svg>
-        <span class="cart-count" id="cartCount">0</span>
-      </button>
+      <div class="nav-right">
+        <!-- Auth: No logueado -->
+        <div id="authGuest" class="auth-guest">
+          <button class="btn-auth-outline" id="btnAbrirLogin">Iniciar sesión</button>
+          <button class="btn-auth-fill" id="btnAbrirRegistro">Registrarse</button>
+        </div>
+        <!-- Auth: Logueado -->
+        <div id="authUser" class="auth-user" style="display:none">
+          <button class="btn-user-menu" id="btnUserMenu">
+            <span class="user-avatar">🐾</span>
+            <span id="userNombre">Usuario</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="#" id="btnVerHistorial">📦 Mis compras</a>
+            <a href="#" id="btnCerrarSesion">🚪 Cerrar sesión</a>
+          </div>
+        </div>
+        <!-- Carrito -->
+        <button class="cart-trigger" id="cartTrigger">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
     </div>
   </nav>
+
+  <!-- MODAL: LOGIN -->
+  <div class="modal-bg" id="modalLogin">
+    <div class="modal-auth">
+      <button class="modal-x" id="cerrarLogin">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="auth-header">
+        <span>🐾</span>
+        <h2>Iniciar <em>sesión</em></h2>
+        <p>Bienvenido de vuelta</p>
+      </div>
+      <div class="fgroup">
+        <label>Correo electrónico</label>
+        <input type="email" id="login-email" placeholder="tu@correo.com"/>
+      </div>
+      <div class="fgroup">
+        <label>Contraseña</label>
+        <input type="password" id="login-password" placeholder="••••••••"/>
+      </div>
+      <button class="btn-pay" id="btnLogin">Iniciar sesión</button>
+      <p class="auth-switch">¿No tienes cuenta? <a href="#" id="switchToRegistro">Regístrate</a></p>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRO -->
+  <div class="modal-bg" id="modalRegistro">
+    <div class="modal-auth">
+      <button class="modal-x" id="cerrarRegistro">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="auth-header">
+        <span>🐾</span>
+        <h2>Crear <em>cuenta</em></h2>
+        <p>Únete a la familia kawaii</p>
+      </div>
+      <div class="fgroup">
+        <label>Nombre completo</label>
+        <input type="text" id="reg-nombre" placeholder="Tu nombre"/>
+      </div>
+      <div class="fgroup">
+        <label>Correo electrónico</label>
+        <input type="email" id="reg-email" placeholder="tu@correo.com"/>
+      </div>
+      <div class="fgroup">
+        <label>Contraseña (mínimo 6 caracteres)</label>
+        <input type="password" id="reg-password" placeholder="••••••••"/>
+      </div>
+      <button class="btn-pay" id="btnRegistro">Crear cuenta</button>
+      <p class="auth-switch">¿Ya tienes cuenta? <a href="#" id="switchToLogin">Inicia sesión</a></p>
+    </div>
+  </div>
+
+  <!-- MODAL: HISTORIAL DE COMPRAS -->
+  <div class="modal-bg" id="modalHistorial">
+    <div class="modal-box modal-historial">
+      <button class="modal-x" id="cerrarHistorial">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h2>Mis <em>compras</em></h2>
+      <div id="historialContent">
+        <div class="grid-loading"><div class="spinner"></div><p>Cargando historial...</p></div>
+      </div>
+    </div>
+  </div>
 
   <!-- HERO -->
   <section class="hero">
@@ -44,28 +129,15 @@
       <p>12 figuras kawaii de resina premium.<br/>Cada pieza, un universo propio.</p>
       <a href="#productos" class="btn-hero">
         Ver colección
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M7 17l9.2-9.2M17 17V7H7"/>
-        </svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
       </a>
     </div>
     <div class="hero-cards">
-      <div class="hcard hc1">
-        <img src="imgs/CONEJO_S.png" alt="Conejo"/>
-        <span>Conejo</span>
-      </div>
-      <div class="hcard hc2">
-        <img src="imgs/PANDA_S.png" alt="Panda"/>
-        <span>Panda</span>
-      </div>
-      <div class="hcard hc3">
-        <img src="imgs/GIRAFA_S.png" alt="Jirafa"/>
-        <span>Jirafa</span>
-      </div>
+      <div class="hcard hc1"><img src="imgs/CONEJO_S.png" alt="Conejo"/><span>Conejo</span></div>
+      <div class="hcard hc2"><img src="imgs/PANDA_S.png" alt="Panda"/><span>Panda</span></div>
+      <div class="hcard hc3"><img src="imgs/GIRAFA_S.png" alt="Jirafa"/><span>Jirafa</span></div>
     </div>
-    <div class="scroll-hint">
-      <div class="scroll-dot"></div>
-    </div>
+    <div class="scroll-hint"><div class="scroll-dot"></div></div>
   </section>
 
   <!-- TICKER -->
@@ -89,6 +161,13 @@
       <h2>Elige tu<br/><em>compañero</em></h2>
     </div>
 
+    <!-- FILTROS -->
+    <div class="filtros-bar">
+      <button class="filtro-btn active" data-filtro="todos">🐾 Todos</button>
+      <button class="filtro-btn" data-filtro="normal">🐼 Colección Animal</button>
+      <button class="filtro-btn" data-filtro="especial">⚡ Edición Especial</button>
+    </div>
+
     <div class="special-bar">
       <span class="special-chip">⚡ Edición Especial</span>
       <span>Godzilla &amp; Power Ranger — piezas de colección exclusivas</span>
@@ -105,26 +184,10 @@
   <!-- FEATURES -->
   <section class="features-section">
     <div class="features-inner">
-      <div class="feat">
-        <div class="feat-icon">🎨</div>
-        <h4>Resina Premium</h4>
-        <p>Pintada a mano, detalle a detalle</p>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">📱</div>
-        <h4>Universal</h4>
-        <p>Compatible con todos los smartphones</p>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">🚚</div>
-        <h4>Envío Express</h4>
-        <p>Gratis en pedidos mayores a $499 MXN</p>
-      </div>
-      <div class="feat">
-        <div class="feat-icon">✨</div>
-        <h4>Edición Limitada</h4>
-        <p>Diseños exclusivos, stock reducido</p>
-      </div>
+      <div class="feat"><div class="feat-icon">🎨</div><h4>Resina Premium</h4><p>Pintada a mano, detalle a detalle</p></div>
+      <div class="feat"><div class="feat-icon">📱</div><h4>Universal</h4><p>Compatible con todos los smartphones</p></div>
+      <div class="feat"><div class="feat-icon">🚚</div><h4>Envío Express</h4><p>Gratis en pedidos mayores a $499 MXN</p></div>
+      <div class="feat"><div class="feat-icon">✨</div><h4>Edición Limitada</h4><p>Diseños exclusivos, stock reducido</p></div>
     </div>
   </section>
 
@@ -134,17 +197,11 @@
     <div class="cart-top">
       <h3>Carrito</h3>
       <button id="cartClose">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
     </div>
     <div class="cart-body" id="cartItems">
-      <div class="cart-empty">
-        <div>🛒</div>
-        <p>Tu carrito está vacío</p>
-        <small>Agrega soportes kawaii</small>
-      </div>
+      <div class="cart-empty"><div>🛒</div><p>Tu carrito está vacío</p><small>Agrega soportes kawaii</small></div>
     </div>
     <div class="cart-bottom" id="cartBottom" style="display:none">
       <div class="cart-subtotal-row">
@@ -153,9 +210,7 @@
       </div>
       <button class="btn-go-checkout" id="btnGoCheckout">
         Continuar
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </button>
     </div>
   </aside>
@@ -164,9 +219,7 @@
   <div class="modal-bg" id="modalBg">
     <div class="modal-box" id="modalBox">
       <button class="modal-x" id="modalClose">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
       <div class="modal-panel modal-left">
         <h2>Finalizar<br/><em>pedido</em></h2>
@@ -176,27 +229,14 @@
           <strong id="modalTotal">$0.00 MXN</strong>
         </div>
         <div class="secure-note">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           Pago 100% seguro · Stripe
         </div>
       </div>
       <div class="modal-panel modal-right">
-        <h3>Tus datos</h3>
+        <h3>Confirmar <em>datos</em></h3>
+        <div id="checkoutUserInfo" class="checkout-user-info"></div>
         <form id="checkoutForm" novalidate>
-          <div class="fgroup">
-            <label>Nombre completo *</label>
-            <input type="text" id="inp-nombre" placeholder="Juan Pérez" required/>
-          </div>
-          <div class="fgroup">
-            <label>Correo electrónico *</label>
-            <input type="email" id="inp-email" placeholder="juan@correo.com" required/>
-          </div>
-          <div class="fgroup">
-            <label>Teléfono</label>
-            <input type="tel" id="inp-tel" placeholder="+52 55 1234 5678"/>
-          </div>
           <div class="fgroup">
             <label>Dirección de envío *</label>
             <textarea id="inp-dir" rows="3" placeholder="Calle, número, colonia, ciudad, CP" required></textarea>
