@@ -14,78 +14,37 @@
       --font-head: 'Syne', sans-serif;
       --font-body: 'DM Sans', sans-serif;
     }
-    body {
-      font-family: var(--font-body);
-      background: var(--cream); color: var(--ink);
-      min-height: 100vh; display: flex;
-      align-items: center; justify-content: center;
-      padding: 2rem;
-    }
-    .card {
-      background: white; border-radius: 24px;
-      padding: 3rem; max-width: 500px; width: 100%;
-      text-align: center;
-      box-shadow: 0 8px 48px rgba(26,23,20,.1);
-      animation: slideUp .6s cubic-bezier(.34,1.56,.64,1) both;
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .success-icon {
-      width: 80px; height: 80px;
-      background: #DCFCE7; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1.5rem; font-size: 2.5rem;
-    }
-    h1 {
-      font-family: var(--font-head);
-      font-size: 2rem; font-weight: 800;
-      letter-spacing: -.04em; margin-bottom: 1rem;
-    }
-    h1 em { font-style: normal; color: var(--green); }
-    p { color: #6B6860; line-height: 1.65; margin-bottom: .5rem; }
-    .info-box {
-      background: #F7F4EF; border-radius: 12px;
-      padding: 1.2rem 1.5rem; margin: 1.5rem 0;
-      text-align: left; font-size: .9rem;
-    }
-    .info-row {
-      display: flex; justify-content: space-between;
-      padding: .4rem 0;
-      border-bottom: 1px solid rgba(26,23,20,.07);
-    }
-    .info-row:last-child { border-bottom: none; }
-    .info-label { color: #6B6860; }
-    .info-value { font-weight: 500; }
-    a.btn-back {
-      display: inline-flex; align-items: center; gap: .5rem;
-      background: var(--ink); color: white;
-      text-decoration: none; padding: .9rem 2rem;
-      border-radius: 50px; font-weight: 500;
-      transition: background .2s, transform .2s;
-      margin-top: .5rem;
-    }
-    a.btn-back:hover { background: var(--accent); transform: scale(1.04); }
-    .confetti { font-size: 1.4rem; letter-spacing: .2rem; margin-bottom: 1rem; }
-    .spinner {
-      width: 36px; height: 36px;
-      border: 2.5px solid rgba(26,23,20,.1);
-      border-top-color: var(--accent);
-      border-radius: 50%; animation: spin .7s linear infinite;
-      margin: 2rem auto;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    body { font-family: var(--font-body); background: var(--cream); color: var(--ink); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .card { background: white; border-radius: 24px; padding: 3rem; max-width: 520px; width: 100%; text-align: center; box-shadow: 0 8px 48px rgba(26,23,20,.1); animation: slideUp .6s cubic-bezier(.34,1.56,.64,1) both; }
+    @keyframes slideUp { from { opacity:0; transform:translateY(40px); } to { opacity:1; transform:translateY(0); } }
+    .success-icon { width:80px; height:80px; background:#DCFCE7; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem; font-size:2.5rem; }
+    h1 { font-family: var(--font-head); font-size:2rem; font-weight:800; letter-spacing:-.04em; margin-bottom:1rem; }
+    h1 em { font-style:normal; color:var(--green); }
+    p { color:#6B6860; line-height:1.65; margin-bottom:.5rem; }
+    .info-box { background:#F7F4EF; border-radius:12px; padding:1.2rem 1.5rem; margin:1.5rem 0; text-align:left; font-size:.9rem; }
+    .info-row { display:flex; justify-content:space-between; padding:.4rem 0; border-bottom:1px solid rgba(26,23,20,.07); }
+    .info-row:last-child { border-bottom:none; }
+    .info-label { color:#6B6860; }
+    .info-value { font-weight:500; }
+    .id-compra { font-family:monospace; background:#F0F0F0; padding:2px 8px; border-radius:6px; font-size:.85rem; letter-spacing:.05em; color:#333; }
+    .items-compra { margin-top:1rem; text-align:left; }
+    .item-row { display:flex; align-items:center; gap:.8rem; padding:.5rem 0; border-bottom:1px solid rgba(26,23,20,.06); }
+    .item-row img { width:40px; height:40px; object-fit:cover; border-radius:8px; }
+    .item-row span { flex:1; font-size:.9rem; }
+    .item-row strong { font-size:.9rem; }
+    a.btn-back { display:inline-flex; align-items:center; gap:.5rem; background:var(--ink); color:white; text-decoration:none; padding:.9rem 2rem; border-radius:50px; font-weight:500; transition:background .2s, transform .2s; margin-top:.5rem; }
+    a.btn-back:hover { background:var(--accent); transform:scale(1.04); }
+    .confetti { font-size:1.4rem; letter-spacing:.2rem; margin-bottom:1rem; }
+    .spinner { width:36px; height:36px; border:2.5px solid rgba(26,23,20,.1); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; margin:2rem auto; }
+    @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
 <body>
   <div class="card" id="card">
-    <div class="spinner" id="loader"></div>
+    <div class="spinner"></div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // CORREGIDO: Usar la URL de producción de Render
     const BACKEND = 'https://kawaii-stands.onrender.com';
 
     async function verificarPago() {
@@ -94,11 +53,7 @@
       const card      = document.getElementById('card');
 
       if (!sessionId) {
-        card.innerHTML = `
-          <div class="success-icon">❌</div>
-          <h1>Sesión <em>inválida</em></h1>
-          <p>No se encontró información del pago.</p>
-          <a class="btn-back" href="index.html">← Volver a la tienda</a>`;
+        card.innerHTML = `<div class="success-icon">❌</div><h1>Sesión <em>inválida</em></h1><p>No se encontró información del pago.</p><a class="btn-back" href="index.html">← Volver a la tienda</a>`;
         return;
       }
 
@@ -107,12 +62,19 @@
         const data = await res.json();
 
         if (data.pagado) {
+          const items  = data.items && Array.isArray(data.items) ? data.items : [];
+          const idCorto = data.venta_id ? data.venta_id.slice(0, 8).toUpperCase() : 'N/A';
+
           card.innerHTML = `
             <div class="confetti">🎉🐾✨</div>
             <div class="success-icon">✅</div>
             <h1>¡Pago <em>exitoso!</em></h1>
-            <p>Tu pedido ha sido confirmado. Te enviamos los detalles a tu correo.</p>
+            <p>Tu pedido ha sido confirmado. Guarda tu número de compra.</p>
             <div class="info-box">
+              <div class="info-row">
+                <span class="info-label">N° de compra</span>
+                <span class="info-value"><span class="id-compra">#${idCorto}</span></span>
+              </div>
               <div class="info-row">
                 <span class="info-label">Correo</span>
                 <span class="info-value">${data.email}</span>
@@ -126,23 +88,26 @@
                 <span class="info-value" style="color:#22C55E">✓ Pagado</span>
               </div>
             </div>
-            <a class="btn-back" href="index.html">← Seguir comprando</a>`;
-          // Limpiar carrito
+            ${items.length > 0 ? `
+              <div class="items-compra">
+                <p style="font-weight:600;margin-bottom:.5rem">🛍️ Productos comprados:</p>
+                ${items.map(item => `
+                  <div class="item-row">
+                    <img src="${item.imagen_url}" alt="${item.nombre}" onerror="this.src='imgs/CONEJO_S.png'"/>
+                    <span>${item.nombre} ×${item.cantidad}</span>
+                    <strong>$${(item.precio * item.cantidad).toFixed(0)}</strong>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+            <a class="btn-back" href="index.html" style="margin-top:1.5rem">← Seguir comprando</a>
+          `;
           localStorage.removeItem('kawaii_cart');
         } else {
-          card.innerHTML = `
-            <div class="success-icon">⚠️</div>
-            <h1>Pago <em>pendiente</em></h1>
-            <p>Tu pago está siendo procesado. Recibirás confirmación por correo.</p>
-            <a class="btn-back" href="index.html">← Volver a la tienda</a>`;
+          card.innerHTML = `<div class="success-icon">⚠️</div><h1>Pago <em>pendiente</em></h1><p>Tu pago está siendo procesado. Recibirás confirmación pronto.</p><a class="btn-back" href="index.html">← Volver a la tienda</a>`;
         }
       } catch (err) {
-        console.error('Error verificando pago:', err);
-        card.innerHTML = `
-          <div class="success-icon">✅</div>
-          <h1>¡Pago <em>recibido!</em></h1>
-          <p>Tu pedido fue procesado. Recibirás confirmación por correo pronto.</p>
-          <a class="btn-back" href="index.html">← Seguir comprando</a>`;
+        card.innerHTML = `<div class="success-icon">✅</div><h1>¡Pago <em>recibido!</em></h1><p>Tu pedido fue procesado. Recibirás confirmación por correo pronto.</p><a class="btn-back" href="index.html">← Seguir comprando</a>`;
         localStorage.removeItem('kawaii_cart');
       }
     }
