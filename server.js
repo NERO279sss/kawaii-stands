@@ -22,6 +22,7 @@ const db = createClient(
 const corsOptions = {
   origin: [
     'https://soportes-3d.netlify.app',
+    'https://soporte-cel.netlify.app',
     'http://localhost:5500',
     'http://localhost:3000',
     process.env.FRONTEND_URL
