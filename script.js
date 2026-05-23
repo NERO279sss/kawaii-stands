@@ -174,7 +174,7 @@ document.getElementById('btnCerrarSesion').addEventListener('click', e => {
   localStorage.removeItem('kawaii_usuario');
   cart = [];
   localStorage.removeItem('kawaii_cart');
-  actualizarCartBadge();
+  actualizarContador();
   actualizarNavAuth();
   mostrarToast('Sesión cerrada 👋');
 });
