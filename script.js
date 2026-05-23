@@ -11,7 +11,7 @@ const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // ── ESTADO GLOBAL ──────────────────────────
-let cart         = JSON.parse(localStorage.getItem('kawaii_cart') || '[]');
+let cart         = [];
 let usuarioActual = JSON.parse(localStorage.getItem('kawaii_usuario') || 'null');
 let todosLosProductos = [];
 let filtroActual = 'todos';
@@ -125,6 +125,11 @@ document.getElementById('btnLogin').addEventListener('click', async () => {
     localStorage.setItem('kawaii_usuario', JSON.stringify(usuarioActual));
     actualizarNavAuth();
     document.getElementById('modalLogin').classList.remove('open');
+    // Restaurar carrito del usuario
+    const savedCart = localStorage.getItem(`kawaii_cart_${usuarioActual.id}`);
+    if (savedCart) cart = JSON.parse(savedCart);
+    actualizarContador();
+    renderCarrito();
     mostrarToast(`¡Bienvenido, ${usuarioActual.nombre.split(' ')[0]}! 🐾`);
   } catch (err) {
     mostrarToast(err.message + ' ❌');
@@ -172,8 +177,8 @@ document.getElementById('btnCerrarSesion').addEventListener('click', e => {
   e.preventDefault();
   usuarioActual = null;
   localStorage.removeItem('kawaii_usuario');
+  if (usuarioActual) localStorage.removeItem(`kawaii_cart_${usuarioActual.id}`);
   cart = [];
-  localStorage.removeItem('kawaii_cart');
   actualizarContador();
   actualizarNavAuth();
   mostrarToast('Sesión cerrada 👋');
@@ -391,7 +396,10 @@ function tiltCard(e, card) {
 function resetTilt(card) { card.style.transform = ''; }
 
 // ── CARRITO ────────────────────────────────
-function guardarCarrito()   { localStorage.setItem('kawaii_cart', JSON.stringify(cart)); }
+function guardarCarrito() {
+  const key = usuarioActual ? `kawaii_cart_${usuarioActual.id}` : 'kawaii_cart_guest';
+  localStorage.setItem(key, JSON.stringify(cart));
+}
 function actualizarContador() {
   const total = cart.reduce((acc, i) => acc + i.cantidad, 0);
   const el    = document.getElementById('cartCount');
