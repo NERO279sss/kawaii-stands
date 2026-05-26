@@ -182,6 +182,7 @@ document.getElementById('btnCerrarSesion').addEventListener('click', e => {
   actualizarContador();
   actualizarNavAuth();
   mostrarToast('Sesión cerrada 👋');
+  setTimeout(() => location.reload(), 800);
 });
 
 // Ver historial
